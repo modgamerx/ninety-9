@@ -15,7 +15,9 @@
     }
 
     body {
-      background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+      background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                  url('https://i.imgur.com/l97Hd17.jpeg') no-repeat center center fixed;
+      background-size: cover;
       min-height: 100vh;
       display: flex;
       justify-content: center;
@@ -27,7 +29,7 @@
       background: rgba(255, 255, 255, 0.1);
       backdrop-filter: blur(10px);
       border-radius: 20px;
-      padding: 30px;
+      padding: 20px;
       width: 100%;
       max-width: 800px;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
@@ -38,21 +40,23 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
       position: relative;
+      flex-wrap: wrap;
     }
 
     .shop-text {
-      font-size: 32px;
+      font-size: 28px;
       font-weight: 700;
       color: white;
       text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-      margin: 0 20px;
+      margin: 0 15px;
+      text-align: center;
     }
 
     .gem-left, .gem-right {
-      width: 50px;
-      height: 50px;
+      width: 40px;
+      height: 40px;
       animation: float 3s ease-in-out infinite;
     }
 
@@ -67,15 +71,15 @@
 
     .packs-container {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 15px;
       margin-top: 20px;
     }
 
     .pack {
       background: rgba(255, 255, 255, 0.15);
       border-radius: 15px;
-      padding: 20px;
+      padding: 15px;
       text-align: center;
       transition: transform 0.3s, box-shadow 0.3s;
       position: relative;
@@ -101,7 +105,7 @@
       padding: 5px 15px;
       border-radius: 20px;
       font-weight: bold;
-      font-size: 14px;
+      font-size: 12px;
       position: absolute;
       top: -10px;
       left: 50%;
@@ -109,28 +113,29 @@
     }
 
     .pack img {
-      width: 120px;
-      height: 120px;
+      width: 100px;
+      height: 100px;
       margin: 10px 0;
+      object-fit: contain;
     }
 
     .info-inline {
       color: white;
       font-weight: 500;
       margin: 10px 0;
-      font-size: 18px;
+      font-size: 16px;
     }
 
     .price {
       background: #4CAF50;
       color: white;
       border: none;
-      padding: 12px 25px;
+      padding: 10px 20px;
       border-radius: 30px;
       font-weight: bold;
       cursor: pointer;
       transition: background 0.3s;
-      font-size: 16px;
+      font-size: 14px;
       width: 100%;
     }
 
@@ -150,17 +155,25 @@
       justify-content: center;
       align-items: center;
       z-index: 1000;
+      padding: 15px;
+      overflow-y: auto;
     }
 
     .popup-container {
       background: linear-gradient(135deg, #2c3e50, #4a6491);
       border-radius: 15px;
-      width: 90%;
+      width: 100%;
       max-width: 500px;
-      padding: 25px;
+      padding: 20px;
       position: relative;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
       color: white;
+      animation: popup-appear 0.4s ease-out;
+    }
+
+    @keyframes popup-appear {
+      0% { transform: scale(0.8); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
     }
 
     .popup-close {
@@ -172,6 +185,11 @@
       color: white;
       font-size: 28px;
       cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .popup-close:hover {
+      transform: scale(1.2);
     }
 
     .popup-header {
@@ -180,7 +198,7 @@
     }
 
     .popup-title1 {
-      font-size: 24px;
+      font-size: 22px;
       font-weight: bold;
     }
 
@@ -199,9 +217,16 @@
     }
 
     .popup-diamonds img {
-      width: 80px;
-      height: 80px;
+      width: 70px;
+      height: 70px;
       margin-bottom: 10px;
+      animation: diamond-pulse 2s infinite;
+    }
+
+    @keyframes diamond-pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
     }
 
     .popup-subtitle2 {
@@ -212,8 +237,8 @@
     }
 
     .popup-subtitle2 img {
-      width: 25px;
-      height: 25px;
+      width: 20px;
+      height: 20px;
       margin-right: 8px;
     }
 
@@ -230,6 +255,12 @@
       border: none;
       background: rgba(255, 255, 255, 0.9);
       font-size: 16px;
+      transition: box-shadow 0.3s;
+    }
+
+    .popup-input:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px #4CAF50;
     }
 
     .popup-button {
@@ -241,11 +272,16 @@
       font-weight: bold;
       cursor: pointer;
       font-size: 16px;
-      transition: background 0.3s;
+      transition: background 0.3s, transform 0.2s;
     }
 
     .popup-button:hover {
       background: #45a049;
+      transform: translateY(-2px);
+    }
+
+    .popup-button:active {
+      transform: translateY(0);
     }
 
     .status-message {
@@ -256,6 +292,12 @@
       border-radius: 8px;
       margin: 15px 0;
       font-weight: bold;
+      animation: fadeIn 0.5s;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
 
     .searching, .verifying {
@@ -281,6 +323,12 @@
       display: none;
       text-align: center;
       margin: 20px 0;
+      animation: slideUp 0.5s ease-out;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
     }
 
     .profile {
@@ -293,11 +341,12 @@
     }
 
     .profile .img {
-      width: 60px;
-      height: 60px;
+      width: 50px;
+      height: 50px;
       border-radius: 50%;
       overflow: hidden;
       margin-right: 15px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
     }
 
     .profile .img img {
@@ -308,7 +357,7 @@
 
     .username {
       font-weight: bold;
-      font-size: 18px;
+      font-size: 16px;
     }
 
     .more {
@@ -317,15 +366,15 @@
     }
 
     .item {
-      width: 8px;
-      height: 8px;
+      width: 6px;
+      height: 6px;
       background: white;
       border-radius: 50%;
       margin-left: 5px;
     }
 
     .congrats {
-      font-size: 20px;
+      font-size: 18px;
       font-weight: bold;
       margin: 15px 0;
     }
@@ -334,15 +383,16 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 22px;
+      font-size: 20px;
       font-weight: bold;
       margin: 20px 0;
     }
 
     .claim-diamonds img {
-      width: 50px;
-      height: 50px;
+      width: 40px;
+      height: 40px;
       margin-right: 10px;
+      animation: diamond-pulse 2s infinite;
     }
 
     .claim-button {
@@ -354,12 +404,13 @@
       font-weight: bold;
       cursor: pointer;
       font-size: 16px;
-      transition: transform 0.3s;
+      transition: transform 0.3s, box-shadow 0.3s;
       width: 100%;
     }
 
     .claim-button:hover {
       transform: scale(1.05);
+      box-shadow: 0 5px 15px rgba(255, 154, 0, 0.4);
     }
 
     .popup-footer {
@@ -381,21 +432,24 @@
       justify-content: center;
       align-items: center;
       z-index: 2000;
+      padding: 15px;
+      animation: fadeIn 0.3s;
     }
 
     .confirmation-container {
       background: linear-gradient(135deg, #2c3e50, #4a6491);
       border-radius: 15px;
-      width: 90%;
+      width: 100%;
       max-width: 400px;
-      padding: 25px;
+      padding: 20px;
       text-align: center;
       color: white;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      animation: popup-appear 0.4s ease-out;
     }
 
     .confirmation-header {
-      font-size: 22px;
+      font-size: 20px;
       font-weight: bold;
       margin-bottom: 20px;
     }
@@ -414,11 +468,12 @@
     }
 
     .confirmation-profile .img {
-      width: 60px;
-      height: 60px;
+      width: 50px;
+      height: 50px;
       border-radius: 50%;
       overflow: hidden;
       margin-right: 15px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
     }
 
     .confirmation-profile .img img {
@@ -429,7 +484,7 @@
 
     .confirmation-username {
       font-weight: bold;
-      font-size: 18px;
+      font-size: 16px;
     }
 
     .confirmation-buttons {
@@ -439,13 +494,13 @@
     }
 
     .confirmation-btn {
-      padding: 12px 25px;
+      padding: 12px 20px;
       border: none;
       border-radius: 30px;
       cursor: pointer;
       font-weight: bold;
       font-size: 16px;
-      transition: transform 0.3s;
+      transition: transform 0.3s, box-shadow 0.3s;
       flex: 1;
       margin: 0 10px;
     }
@@ -455,17 +510,120 @@
       color: white;
     }
 
+    .confirm-yes:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+    }
+
     .confirm-no {
       background: #f44336;
       color: white;
     }
 
-    .confirmation-btn:hover {
-      transform: scale(1.05);
+    .confirm-no:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(244, 67, 54, 0.4);
+    }
+
+    .confirmation-btn:active {
+      transform: translateY(0);
     }
 
     #finalDiamondCount {
       display: none;
+    }
+
+    /* Progress Bar */
+    .progress-container {
+      width: 100%;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+      margin: 20px 0;
+      overflow: hidden;
+      display: none;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(to right, #4CAF50, #8BC34A);
+      border-radius: 4px;
+      width: 0%;
+      transition: width 0.5s ease;
+    }
+
+    /* Mobile-specific adjustments */
+    @media (max-width: 480px) {
+      .shop-container {
+        padding: 15px;
+      }
+      
+      .shop-text {
+        font-size: 24px;
+      }
+      
+      .gem-left, .gem-right {
+        width: 30px;
+        height: 30px;
+      }
+      
+      .packs-container {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+      
+      .pack {
+        padding: 12px;
+      }
+      
+      .pack img {
+        width: 80px;
+        height: 80px;
+      }
+      
+      .info-inline {
+        font-size: 14px;
+      }
+      
+      .price {
+        padding: 8px 15px;
+        font-size: 13px;
+      }
+      
+      .popup-container {
+        padding: 15px;
+      }
+      
+      .popup-title1 {
+        font-size: 20px;
+      }
+      
+      .popup-diamonds img {
+        width: 60px;
+        height: 60px;
+      }
+      
+      .popup-subtitle2 {
+        font-size: 14px;
+      }
+      
+      .popup-subtitle2 img {
+        width: 18px;
+        height: 18px;
+      }
+      
+      .confirmation-container {
+        padding: 15px;
+      }
+      
+      .confirmation-header {
+        font-size: 18px;
+      }
+      
+      .confirmation-btn {
+        padding: 10px 15px;
+        font-size: 14px;
+      }
     }
   </style>
 </head>
@@ -525,6 +683,11 @@
         </span>
       </div>
 
+      <!-- Progress Bar -->
+      <div class="progress-container" id="progressContainer">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+
       <!-- Form -->
       <div class="popup-form" id="popupForm">
         <input type="text" class="popup-input" id="usernameInput" placeholder="Enter your username" required>
@@ -533,16 +696,16 @@
 
       <!-- Status Messages -->
       <div class="status-message searching" id="searchingMessage">
-        <i class="fas fa-spinner fa-spin"></i> Searching...
+        <i class="fas fa-spinner fa-spin"></i> Searching for account...
       </div>
 
       <div class="status-message verifying" id="verifyingMessage">
-        <i class="fas fa-spinner fa-spin"></i> Verifying...
+        <i class="fas fa-spinner fa-spin"></i> Verifying account eligibility...
       </div>
 
       <div class="status-message found" id="foundMessage">
         <div class="name" id="finalProfileName"></div>
-        <i class="fas fa-check-circle"></i> Username found!
+        <i class="fas fa-check-circle"></i> Account verified successfully!
       </div>
 
       <!-- Final Claim Section -->
@@ -586,8 +749,8 @@
         </div>
       </div>
       <div class="confirmation-buttons">
-        <button class="confirmation-btn confirm-yes" id="confirmYesBtn">Yes</button>
-        <button class="confirmation-btn confirm-no" id="confirmNoBtn">No</button>
+        <button class="confirmation-btn confirm-yes" id="confirmYesBtn">Yes, Continue</button>
+        <button class="confirmation-btn confirm-no" id="confirmNoBtn">No, Try Again</button>
       </div>
     </div>
   </div>
@@ -615,6 +778,8 @@
       const finalProfileUsername = document.getElementById('finalProfileUsername');
       const confirmationProfileImage = document.getElementById('confirmationProfileImage');
       const confirmationProfileUsername = document.getElementById('confirmationProfileUsername');
+      const progressContainer = document.getElementById('progressContainer');
+      const progressBar = document.getElementById('progressBar');
 
       // Open popup when claim button is clicked
       claimButtons.forEach(button => {
@@ -623,6 +788,11 @@
           popupDiamondCount.textContent = gems;
           finalDiamondCount.textContent = gems;
           popupOverlay.style.display = 'flex';
+          
+          // Add a slight delay for a more natural feel
+          setTimeout(() => {
+            usernameInput.focus();
+          }, 300);
         });
       });
 
@@ -632,35 +802,70 @@
         resetPopup();
       });
 
+      // Close popup when clicking outside
+      popupOverlay.addEventListener('click', function(e) {
+        if (e.target === popupOverlay) {
+          popupOverlay.style.display = 'none';
+          resetPopup();
+        }
+      });
+
       // Search button click
       searchButton.addEventListener('click', function() {
         const username = usernameInput.value.trim();
         
         if (!username) {
-          alert('Please enter a username');
+          showError('Please enter a username');
           return;
         }
+        
+        if (username.length < 3) {
+          showError('Username must be at least 3 characters');
+          return;
+        }
+        
+        // Show progress bar
+        progressContainer.style.display = 'block';
         
         // Show searching message
         popupForm.style.display = 'none';
         searchingMessage.style.display = 'flex';
         
-        // Simulate searching and verification
-        setTimeout(function() {
+        // Simulate searching and verification with progress
+        simulateProgress(0, 30, 1500, function() {
           searchingMessage.style.display = 'none';
           verifyingMessage.style.display = 'flex';
           
-          setTimeout(function() {
+          simulateProgress(30, 70, 2000, function() {
             verifyingMessage.style.display = 'none';
             foundMessage.style.display = 'flex';
             
-            // Show confirmation after a delay
-            setTimeout(function() {
-              showConfirmation(username);
-            }, 1500);
-          }, 1500);
-        }, 1500);
+            simulateProgress(70, 100, 1000, function() {
+              // Show confirmation after a delay
+              setTimeout(function() {
+                showConfirmation(username);
+              }, 500);
+            });
+          });
+        });
       });
+
+      // Simulate progress with callback
+      function simulateProgress(start, end, duration, callback) {
+        const startTime = Date.now();
+        const updateProgress = () => {
+          const elapsed = Date.now() - startTime;
+          const progress = Math.min(start + (end - start) * (elapsed / duration), end);
+          progressBar.style.width = progress + '%';
+          
+          if (progress < end) {
+            requestAnimationFrame(updateProgress);
+          } else if (callback) {
+            callback();
+          }
+        };
+        updateProgress();
+      }
 
       // Show confirmation dialog
       function showConfirmation(username) {
@@ -669,16 +874,25 @@
         confirmationProfileImage.src = profileImage;
         confirmationProfileUsername.textContent = '@' + username;
         
+        // Hide progress bar
+        progressContainer.style.display = 'none';
+        
         // Show confirmation overlay
         confirmationOverlay.style.display = 'flex';
       }
 
       // Yes button in confirmation - redirect to the link
       confirmYesBtn.addEventListener('click', function() {
-        window.open('https://redirectapps.org/cl/i/dvd9o7', '_blank');
-        confirmationOverlay.style.display = 'none';
-        popupOverlay.style.display = 'none';
-        resetPopup();
+        // Show success message
+        showSuccess('Redirecting to claim your diamonds...');
+        
+        // Small delay before redirect
+        setTimeout(function() {
+          window.open('https://redirectapps.org/cl/i/dvd9o7', '_blank');
+          confirmationOverlay.style.display = 'none';
+          popupOverlay.style.display = 'none';
+          resetPopup();
+        }, 1000);
       });
 
       // No button in confirmation
@@ -686,16 +900,70 @@
         confirmationOverlay.style.display = 'none';
         popupForm.style.display = 'flex';
         foundMessage.style.display = 'none';
+        progressContainer.style.display = 'none';
         usernameInput.value = '';
         usernameInput.focus();
       });
 
       // Final claim button
       finalClaimButton.addEventListener('click', function() {
-        alert('Diamonds added to your account!');
-        popupOverlay.style.display = 'none';
-        resetPopup();
+        showSuccess('Diamonds added to your account!');
+        
+        // Small delay before closing
+        setTimeout(function() {
+          popupOverlay.style.display = 'none';
+          resetPopup();
+        }, 1500);
       });
+
+      // Show error message
+      function showError(message) {
+        // Create temporary error message
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'status-message';
+        errorDiv.style.background = 'rgba(244, 67, 54, 0.2)';
+        errorDiv.style.color = '#f44336';
+        errorDiv.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${message}`;
+        
+        // Insert after the form
+        popupForm.parentNode.insertBefore(errorDiv, popupForm.nextSibling);
+        errorDiv.style.display = 'flex';
+        
+        // Remove after 3 seconds
+        setTimeout(() => {
+          errorDiv.style.display = 'none';
+          setTimeout(() => {
+            if (errorDiv.parentNode) {
+              errorDiv.parentNode.removeChild(errorDiv);
+            }
+          }, 500);
+        }, 3000);
+      }
+
+      // Show success message
+      function showSuccess(message) {
+        // Create temporary success message
+        const successDiv = document.createElement('div');
+        successDiv.className = 'status-message';
+        successDiv.style.background = 'rgba(40, 167, 69, 0.2)';
+        successDiv.style.color = '#28a745';
+        successDiv.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
+        
+        // Insert at the top of popup container
+        const popupContainer = document.querySelector('.popup-container');
+        popupContainer.insertBefore(successDiv, popupContainer.firstChild);
+        successDiv.style.display = 'flex';
+        
+        // Remove after 3 seconds
+        setTimeout(() => {
+          successDiv.style.display = 'none';
+          setTimeout(() => {
+            if (successDiv.parentNode) {
+              successDiv.parentNode.removeChild(successDiv);
+            }
+          }, 500);
+        }, 3000);
+      }
 
       // Reset popup to initial state
       function resetPopup() {
@@ -704,6 +972,8 @@
         verifyingMessage.style.display = 'none';
         foundMessage.style.display = 'none';
         claimSection.style.display = 'none';
+        progressContainer.style.display = 'none';
+        progressBar.style.width = '0%';
         usernameInput.value = '';
       }
     });
