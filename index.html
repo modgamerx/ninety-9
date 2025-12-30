@@ -1,982 +1,378 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Free Diamonds</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Roboto', sans-serif;
-    }
-
-    body {
-      background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
-                  url('https://i.imgur.com/l97Hd17.jpeg') no-repeat center center fixed;
-      background-size: cover;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-    }
-
-    .shop-container {
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
-      border-radius: 20px;
-      padding: 20px;
-      width: 100%;
-      max-width: 800px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-
-    .shop-title {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-bottom: 20px;
-      position: relative;
-      flex-wrap: wrap;
-    }
-
-    .shop-text {
-      font-size: 28px;
-      font-weight: 700;
-      color: white;
-      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-      margin: 0 15px;
-      text-align: center;
-    }
-
-    .gem-left, .gem-right {
-      width: 40px;
-      height: 40px;
-      animation: float 3s ease-in-out infinite;
-    }
-
-    .gem-right {
-      animation-delay: 1.5s;
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-    }
-
-    .packs-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 15px;
-      margin-top: 20px;
-    }
-
-    .pack {
-      background: rgba(255, 255, 255, 0.15);
-      border-radius: 15px;
-      padding: 15px;
-      text-align: center;
-      transition: transform 0.3s, box-shadow 0.3s;
-      position: relative;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-
-    .pack:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-    }
-
-    .pack.big {
-      grid-column: 1 / -1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      background: linear-gradient(135deg, #ff9a00, #ff2e00);
-    }
-
-    .best-value {
-      background: #ffcc00;
-      color: #333;
-      padding: 5px 15px;
-      border-radius: 20px;
-      font-weight: bold;
-      font-size: 12px;
-      position: absolute;
-      top: -10px;
-      left: 50%;
-      transform: translateX(-50%);
-    }
-
-    .pack img {
-      width: 100px;
-      height: 100px;
-      margin: 10px 0;
-      object-fit: contain;
-    }
-
-    .info-inline {
-      color: white;
-      font-weight: 500;
-      margin: 10px 0;
-      font-size: 16px;
-    }
-
-    .price {
-      background: #4CAF50;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 30px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.3s;
-      font-size: 14px;
-      width: 100%;
-    }
-
-    .price:hover {
-      background: #45a049;
-    }
-
-    /* Popup Styles */
-    .popup-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.8);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-      padding: 15px;
-      overflow-y: auto;
-    }
-
-    .popup-container {
-      background: linear-gradient(135deg, #2c3e50, #4a6491);
-      border-radius: 15px;
-      width: 100%;
-      max-width: 500px;
-      padding: 20px;
-      position: relative;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-      color: white;
-      animation: popup-appear 0.4s ease-out;
-    }
-
-    @keyframes popup-appear {
-      0% { transform: scale(0.8); opacity: 0; }
-      100% { transform: scale(1); opacity: 1; }
-    }
-
-    .popup-close {
-      position: absolute;
-      top: 15px;
-      right: 20px;
-      background: none;
-      border: none;
-      color: white;
-      font-size: 28px;
-      cursor: pointer;
-      transition: transform 0.2s;
-    }
-
-    .popup-close:hover {
-      transform: scale(1.2);
-    }
-
-    .popup-header {
-      text-align: center;
-      margin-bottom: 15px;
-    }
-
-    .popup-title1 {
-      font-size: 22px;
-      font-weight: bold;
-    }
-
-    .popup-divider {
-      border: none;
-      height: 2px;
-      background: rgba(255, 255, 255, 0.3);
-      margin: 15px 0;
-    }
-
-    .popup-diamonds {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin: 20px 0;
-    }
-
-    .popup-diamonds img {
-      width: 70px;
-      height: 70px;
-      margin-bottom: 10px;
-      animation: diamond-pulse 2s infinite;
-    }
-
-    @keyframes diamond-pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.1); }
-      100% { transform: scale(1); }
-    }
-
-    .popup-subtitle2 {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-top: 10px;
-    }
-
-    .popup-subtitle2 img {
-      width: 20px;
-      height: 20px;
-      margin-right: 8px;
-    }
-
-    .popup-form {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-      margin: 20px 0;
-    }
-
-    .popup-input {
-      padding: 15px;
-      border-radius: 8px;
-      border: none;
-      background: rgba(255, 255, 255, 0.9);
-      font-size: 16px;
-      transition: box-shadow 0.3s;
-    }
-
-    .popup-input:focus {
-      outline: none;
-      box-shadow: 0 0 0 2px #4CAF50;
-    }
-
-    .popup-button {
-      padding: 15px;
-      border-radius: 8px;
-      border: none;
-      background: #4CAF50;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-      font-size: 16px;
-      transition: background 0.3s, transform 0.2s;
-    }
-
-    .popup-button:hover {
-      background: #45a049;
-      transform: translateY(-2px);
-    }
-
-    .popup-button:active {
-      transform: translateY(0);
-    }
-
-    .status-message {
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 15px;
-      border-radius: 8px;
-      margin: 15px 0;
-      font-weight: bold;
-      animation: fadeIn 0.5s;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    .searching, .verifying {
-      background: rgba(255, 193, 7, 0.2);
-      color: #ffc107;
-    }
-
-    .found {
-      background: rgba(40, 167, 69, 0.2);
-      color: #28a745;
-    }
-
-    .status-message i {
-      margin-right: 10px;
-    }
-
-    .name {
-      font-weight: bold;
-      margin-right: 10px;
-    }
-
-    .claim-section {
-      display: none;
-      text-align: center;
-      margin: 20px 0;
-      animation: slideUp 0.5s ease-out;
-    }
-
-    @keyframes slideUp {
-      from { transform: translateY(20px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
-
-    .profile {
-      display: flex;
-      align-items: center;
-      background: rgba(255, 255, 255, 0.1);
-      padding: 15px;
-      border-radius: 10px;
-      margin-bottom: 20px;
-    }
-
-    .profile .img {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      overflow: hidden;
-      margin-right: 15px;
-      border: 2px solid rgba(255, 255, 255, 0.3);
-    }
-
-    .profile .img img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .username {
-      font-weight: bold;
-      font-size: 16px;
-    }
-
-    .more {
-      display: flex;
-      margin-left: auto;
-    }
-
-    .item {
-      width: 6px;
-      height: 6px;
-      background: white;
-      border-radius: 50%;
-      margin-left: 5px;
-    }
-
-    .congrats {
-      font-size: 18px;
-      font-weight: bold;
-      margin: 15px 0;
-    }
-
-    .claim-diamonds {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      font-weight: bold;
-      margin: 20px 0;
-    }
-
-    .claim-diamonds img {
-      width: 40px;
-      height: 40px;
-      margin-right: 10px;
-      animation: diamond-pulse 2s infinite;
-    }
-
-    .claim-button {
-      padding: 15px 25px;
-      border-radius: 30px;
-      border: none;
-      background: linear-gradient(135deg, #ff9a00, #ff2e00);
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-      font-size: 16px;
-      transition: transform 0.3s, box-shadow 0.3s;
-      width: 100%;
-    }
-
-    .claim-button:hover {
-      transform: scale(1.05);
-      box-shadow: 0 5px 15px rgba(255, 154, 0, 0.4);
-    }
-
-    .popup-footer {
-      text-align: center;
-      font-size: 14px;
-      color: rgba(255, 255, 255, 0.7);
-      margin-top: 20px;
-    }
-
-    /* Confirmation Overlay */
-    .confirmation-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.8);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 2000;
-      padding: 15px;
-      animation: fadeIn 0.3s;
-    }
-
-    .confirmation-container {
-      background: linear-gradient(135deg, #2c3e50, #4a6491);
-      border-radius: 15px;
-      width: 100%;
-      max-width: 400px;
-      padding: 20px;
-      text-align: center;
-      color: white;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-      animation: popup-appear 0.4s ease-out;
-    }
-
-    .confirmation-header {
-      font-size: 20px;
-      font-weight: bold;
-      margin-bottom: 20px;
-    }
-
-    .confirmation-content {
-      margin: 20px 0;
-    }
-
-    .confirmation-profile {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(255, 255, 255, 0.1);
-      padding: 15px;
-      border-radius: 10px;
-    }
-
-    .confirmation-profile .img {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      overflow: hidden;
-      margin-right: 15px;
-      border: 2px solid rgba(255, 255, 255, 0.3);
-    }
-
-    .confirmation-profile .img img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .confirmation-username {
-      font-weight: bold;
-      font-size: 16px;
-    }
-
-    .confirmation-buttons {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 25px;
-    }
-
-    .confirmation-btn {
-      padding: 12px 20px;
-      border: none;
-      border-radius: 30px;
-      cursor: pointer;
-      font-weight: bold;
-      font-size: 16px;
-      transition: transform 0.3s, box-shadow 0.3s;
-      flex: 1;
-      margin: 0 10px;
-    }
-
-    .confirm-yes {
-      background: #4CAF50;
-      color: white;
-    }
-
-    .confirm-yes:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
-    }
-
-    .confirm-no {
-      background: #f44336;
-      color: white;
-    }
-
-    .confirm-no:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(244, 67, 54, 0.4);
-    }
-
-    .confirmation-btn:active {
-      transform: translateY(0);
-    }
-
-    #finalDiamondCount {
-      display: none;
-    }
-
-    /* Progress Bar */
-    .progress-container {
-      width: 100%;
-      height: 8px;
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 4px;
-      margin: 20px 0;
-      overflow: hidden;
-      display: none;
-    }
-
-    .progress-bar {
-      height: 100%;
-      background: linear-gradient(to right, #4CAF50, #8BC34A);
-      border-radius: 4px;
-      width: 0%;
-      transition: width 0.5s ease;
-    }
-
-    /* Mobile-specific adjustments */
-    @media (max-width: 480px) {
-      .shop-container {
-        padding: 15px;
-      }
-      
-      .shop-text {
-        font-size: 24px;
-      }
-      
-      .gem-left, .gem-right {
-        width: 30px;
-        height: 30px;
-      }
-      
-      .packs-container {
-        grid-template-columns: 1fr;
-        gap: 12px;
-      }
-      
-      .pack {
-        padding: 12px;
-      }
-      
-      .pack img {
-        width: 80px;
-        height: 80px;
-      }
-      
-      .info-inline {
-        font-size: 14px;
-      }
-      
-      .price {
-        padding: 8px 15px;
-        font-size: 13px;
-      }
-      
-      .popup-container {
-        padding: 15px;
-      }
-      
-      .popup-title1 {
-        font-size: 20px;
-      }
-      
-      .popup-diamonds img {
-        width: 60px;
-        height: 60px;
-      }
-      
-      .popup-subtitle2 {
-        font-size: 14px;
-      }
-      
-      .popup-subtitle2 img {
-        width: 18px;
-        height: 18px;
-      }
-      
-      .confirmation-container {
-        padding: 15px;
-      }
-      
-      .confirmation-header {
-        font-size: 18px;
-      }
-      
-      .confirmation-btn {
-        padding: 10px 15px;
-        font-size: 14px;
-      }
-    }
-  </style>
+<!DOCTYPE html><html lang="en" class="scroll-smooth dark"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>APKRIFT.com - #1 Online Resource Tool For Apps & Games</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Montserrat', 'sans-serif'] },
+                    animation: { 
+                        'shimmer': 'shimmer 2.5s linear infinite', 
+                        'breathe': 'breathe 5s ease-in-out infinite',
+                        'spin-slow': 'spin 3s linear infinite',
+                    },
+                    keyframes: {
+                        shimmer: { '0%': { transform: 'translateX(-100%)' }, '100%': { transform: 'translateX(100%)' } },
+                        breathe: { '0%, 100%': { opacity: '0.5', transform: 'scale(1)' }, '50%': { opacity: '0.8', transform: 'scale(1.15)' } }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { -webkit-tap-highlight-color: transparent; background-image: radial-gradient(rgba(203, 213, 225, 0.4) 1.5px, transparent 1.5px); background-size: 24px 24px; }
+        .dark body { background-image: radial-gradient(rgba(55, 65, 81, 0.4) 1.5px, transparent 1.5px); }
+        .ambient-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -10; background: radial-gradient(circle at 15% 50%, rgba(79, 70, 229, 0.15), transparent 40%), radial-gradient(circle at 85% 30%, rgba(168, 85, 247, 0.15), transparent 35%); filter: blur(70px); pointer-events: none; }
+        .radius-20 { border-radius: 20px !important; }
+        .icon-wrapper { position: relative; overflow: hidden; border-radius: 20px; transform: translateZ(0); }
+        .icon-shimmer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to right, transparent 0%, rgba(255,255,255,0.3) 50%, transparent 100%); transform: skewX(-25deg); pointer-events: none; }
+        .progress-fill { transition: width 0.8s ease-in-out; width: 0%; }
+        @keyframes orbit {
+            from { transform: rotate(0deg) translateX(25px) rotate(0deg); }
+            to   { transform: rotate(360deg) translateX(25px) rotate(-360deg); }
+        }
+        .animate-search-circle { animation: orbit 2s linear infinite; }
+        .glass-modal { background: #242b33; border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
+        .platform-btn.active { border-color: #3b82f6; background: rgba(59, 130, 246, 0.1); }
+        select { -webkit-appearance: none; }
+    </style>
 </head>
-<body>
-  <div class="shop-container">
-    <div class="shop-title">
-      <img class="gem-left" src="https://cdn.jsdelivr.net/gh/monorolls/99@main/dia1.png" alt="gem">
-      <span class="shop-text">FREE DIAMONDS</span>
-      <img class="gem-right" src="https://cdn.jsdelivr.net/gh/monorolls/99@main/dia.png" alt="gem">
-    </div>
+<body class="antialiased selection:bg-blue-500 selection:text-white flex flex-col min-h-screen bg-slate-50 dark:bg-[#111827] text-slate-800 dark:text-slate-200 transition-colors duration-300">
 
-    <div class="packs-container">
-      <!-- Packs -->
-      <div class="pack big" data-gems="700">
-        <div class="best-value">BEST VALUE</div>
-        <div class="info-inline">Giant Sack of Diamonds</div>
-        <img src="https://cdn.jsdelivr.net/gh/monorolls/99@main/700-diamonds.png" alt="700 diamonds">
-        <button class="price claim-btn" data-gems="750">CLAIM</button>
-      </div>
+    <div class="ambient-bg animate-breathe"></div>
 
-      <div class="pack" data-gems="250">
-        <img src="https://cdn.jsdelivr.net/gh/monorolls/99@main/250-diamonds.png" alt="250 diamonds">
-        <div class="info-inline">Good Sack of Diamonds</div>
-        <button class="price claim-btn" data-gems="250">CLAIM</button>
-      </div>
+    <header class="fixed top-0 w-full z-50 bg-white/80 dark:bg-[#111827]/80 backdrop-blur-md h-[70px] border-b border-slate-200 dark:border-slate-800">
+        <div class="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
+            <a href="/" class="flex items-center gap-3 group">
+                <div class="h-9 w-9 bg-blue-600 rounded-lg flex items-center justify-center text-white font-black shadow-lg">AK</div>
+                <span class="font-black text-xl tracking-tight text-slate-800 dark:text-white">APKRIFT</span>
+            </a>
+            <button id="theme-toggle" class="w-10 h-10 rounded-full flex items-center justify-center bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-yellow-400">
+                <i class="fa-solid fa-sun hidden dark:block"></i>
+                <i class="fa-solid fa-moon block dark:hidden"></i>
+            </button>
+        </div>
+    </header>
 
-      <div class="pack" data-gems="100">
-        <img src="https://cdn.jsdelivr.net/gh/monorolls/99@main/100-diamonds.png" alt="100 diamonds">
-        <div class="info-inline">Old Sack of Diamonds</div>
-        <button class="price claim-btn" data-gems="100">CLAIM</button>
-      </div>
+    <!-- HEADER SECTION -->
+    <section class="pt-32 pb-12 px-4 text-center max-w-4xl mx-auto relative z-10">
+        <div class="inline-flex items-center gap-2 bg-blue-500/10 text-blue-600 dark:text-blue-400 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest mb-6 border border-blue-500/20">
+            <i class="fa-solid fa-shield-check"></i> Verified Resource Hub
+        </div>
+        <h1 class="text-4xl md:text-7xl font-black text-slate-900 dark:text-white mb-6 leading-[1.1]">APKRIFT: Your #1<br><span class="text-blue-600 dark:text-blue-400">Resource Hub</span></h1>
+        <p class="text-slate-500 dark:text-slate-400 text-lg md:text-xl font-medium max-w-2xl mx-auto mb-10 leading-relaxed">Premium features, unlimited resources, and exclusive tweaks. <br class="hidden md:block"> <span class="text-slate-900 dark:text-slate-200 font-bold">Simple, fast, and secure.</span></p>
 
-      <div class="pack" data-gems="20">
-        <img src="https://cdn.jsdelivr.net/gh/monorolls/99@main/20-diamonds.webp" alt="20 diamonds">
-        <div class="info-inline">Small Pile of Diamonds</div>
-        <button class="price claim-btn" data-gems="20">CLAIM</button>
-      </div>
-    </div>
-  </div>
+        <div class="flex flex-wrap justify-center gap-3 mb-12">
+            <span class="px-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold flex items-center gap-2 shadow-sm"><i class="fa-brands fa-apple text-sm"></i> iOS</span>
+            <span class="px-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold flex items-center gap-2 shadow-sm"><i class="fa-brands fa-android text-sm"></i> Android</span>
+            <span class="px-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold flex items-center gap-2 shadow-sm"><i class="fa-solid fa-desktop text-sm"></i> Desktop</span>
+            <span class="px-4 py-2 bg-blue-600 text-white rounded-xl text-xs font-bold flex items-center gap-2 shadow-lg"><i class="fa-solid fa-lock-open text-sm"></i> No Jailbreak</span>
+        </div>
+        
+        <div class="relative max-w-lg mx-auto group">
+            <input type="text" id="mainSearchInput" placeholder="Search apps & games..." class="block w-full pl-12 pr-4 py-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl focus:ring-2 focus:ring-blue-500 shadow-lg outline-none transition-all">
+            <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+        </div>
+    </section>
 
-  <!-- Popup -->
-  <div class="popup-overlay" id="popupOverlay">
-    <div class="popup-container">
-      <button class="popup-close" id="popupClose">×</button>
-      
-      <div class="popup-header">
-        <span class="popup-title1">Get unlimited diamonds</span>
-      </div>
-      <hr class="popup-divider">
+    <main class="max-w-[80rem] mx-auto px-4 sm:px-6 pb-24 relative z-10 flex-grow">
+        <div id="appsGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-6"></div>
+    </main>
 
-      <div class="popup-diamonds" id="popupDiamonds">
-        <img id="popupDiamondImage" src="https://cdn.jsdelivr.net/gh/monorolls/99@main/dia.png" alt="diamonds" style="width:90px; height:90px;">
-        <span id="popupDiamondCount" style="color:#fff; position:relative; bottom:20px; font-size:19px;">700</span>
-        <span style="color:#fff; position:relative; bottom:20px;font-size:19px;">Diamonds</span>
-        <span class="popup-subtitle2" style="position:relative; bottom:-10px; left:-140px; color:#fff; font-size:22px;">
-          <img src="https://cdn.jsdelivr.net/gh/monorolls/99@main/robux.png" alt="icon" style="width:30px; height:30px; vertical-align:middle; position:relative; bottom:2px;">0,0
-        </span>
-      </div>
+    <!-- FOOTER SECTION -->
+    <footer class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 pt-16 pb-8 relative z-20 shadow-[0_-10px_40px_rgba(0,0,0,0.05)] dark:shadow-[0_-10px_40px_rgba(0,0,0,0.2)]">
+        <div class="max-w-7xl mx-auto px-6 text-center md:text-left">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10 mb-12">
+                <div>
+                    <div class="flex items-center justify-center md:justify-start gap-2 mb-5 opacity-90">
+                        <div class="h-8 w-8 bg-blue-600 rounded flex items-center justify-center text-white font-bold text-xs">AK</div>
+                        <span class="font-bold text-lg text-slate-800 dark:text-white">ApkRift</span>
+                    </div>
+                    <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed font-medium">The world's leading platform for premium game mods, unlimited resources, and exclusive tweaks. Verified, safe, and always online.</p>
+                </div>
+                <div class="text-center">
+                    <h4 class="font-bold text-slate-900 dark:text-white mb-5 uppercase tracking-wide text-xs">Links</h4>
+                    <ul class="space-y-3 text-sm text-slate-500 dark:text-slate-400 font-medium">
+                        <li><a href="#" class="hover:text-blue-600 transition-colors">Home</a></li>
+                        <li><a href="#" class="hover:text-blue-600 transition-colors">Latest Updates</a></li>
+                        <li><a href="#" class="hover:text-blue-600 transition-colors">Support</a></li>
+                    </ul>
+                </div>
+                <div class="text-center md:text-right">
+                    <h4 class="font-bold text-slate-900 dark:text-white mb-5 uppercase tracking-wide text-xs">Connect</h4>
+                    <div class="flex justify-center md:justify-end gap-4 mb-6">
+                        <a href="#" class="w-11 h-11 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-blue-600 hover:text-white transition-all transform hover:scale-110 shadow-sm"><i class="fa-brands fa-discord text-lg"></i></a>
+                        <a href="#" class="w-11 h-11 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-sky-500 hover:text-white transition-all transform hover:scale-110 shadow-sm"><i class="fa-brands fa-twitter text-lg"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-slate-200 dark:border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-slate-500 text-xs font-bold">© 2025 ApkRift. All rights reserved.</p>
+                <div class="flex gap-6 text-xs text-slate-500 font-bold uppercase">
+                    <button class="hover:text-slate-300 transition-colors">Privacy</button>
+                    <button class="hover:text-slate-300 transition-colors">Terms</button>
+                    <button class="hover:text-slate-300 transition-colors">DMCA</button>
+                </div>
+            </div>
+        </div>
+    </footer>
 
-      <!-- Progress Bar -->
-      <div class="progress-container" id="progressContainer">
-        <div class="progress-bar" id="progressBar"></div>
-      </div>
-
-      <!-- Form -->
-      <div class="popup-form" id="popupForm">
-        <input type="text" class="popup-input" id="usernameInput" placeholder="Enter your username" required>
-        <button class="popup-button" id="searchButton">CLAIM NOW</button>
-      </div>
-
-      <!-- Status Messages -->
-      <div class="status-message searching" id="searchingMessage">
-        <i class="fas fa-spinner fa-spin"></i> Searching for account...
-      </div>
-
-      <div class="status-message verifying" id="verifyingMessage">
-        <i class="fas fa-spinner fa-spin"></i> Verifying account eligibility...
-      </div>
-
-      <div class="status-message found" id="foundMessage">
-        <div class="name" id="finalProfileName"></div>
-        <i class="fas fa-check-circle"></i> Account verified successfully!
-      </div>
-
-      <!-- Final Claim Section -->
-      <div class="claim-section" id="claimSection">
-        <div class="profile" id="userProfile">
-          <div class="img">
-            <img src="" alt="Profile" id="finalProfileImage">
-          </div>
-          <div class="username" id="finalProfileUsername">@username</div>
-          <div class="more">
-            <div class="item"></div>
-            <div class="item"></div>
-            <div class="item"></div>
-          </div>
+    <!-- MODAL SYSTEM -->
+    <div id="modalOverlay" class="fixed inset-0 z-[100] bg-[#0f172a]/95 backdrop-blur-md hidden items-center justify-center p-4">
+        
+        <!-- Delta Script Overlay -->
+        <div id="scriptOverlay" class="hidden absolute inset-0 z-[110] bg-black/60 backdrop-blur-sm items-center justify-center p-4 animate__animated animate__fadeIn">
+            <div class="w-full max-w-xs glass-modal rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
+                <div class="bg-blue-600 p-4 text-center">
+                    <h3 class="text-white font-black uppercase tracking-widest text-xs">Script Library</h3>
+                </div>
+                <div id="scriptList" class="max-h-64 overflow-y-auto bg-[#1a2129]"></div>
+                <div class="p-4 bg-[#1a2129] border-t border-white/5">
+                    <button onclick="applyScripts()" class="w-full py-3 bg-blue-600 text-white font-black rounded-xl text-xs uppercase shadow-lg">Apply Scripts</button>
+                </div>
+            </div>
         </div>
 
-        <p class="congrats">🎉 Congratulations! 🎉</p>
-        <div class="claim-diamonds">
-          <img id="finalDiamondImage" src="https://cdn-icons-png.flaticon.com/512/2907/2907312.png" alt="diamonds">
-          <span id="finalDiamondCount">700</span> Diamonds
+        <div id="step1" class="hidden text-center w-full max-w-xs animate__animated animate__fadeIn">
+            <div class="mb-12 flex justify-center"><i class="fa-solid fa-gear text-8xl text-slate-400/80 animate-spin-slow"></i></div>
+            <div class="w-48 mx-auto bg-slate-300 dark:bg-slate-700 h-8 rounded-full overflow-hidden relative shadow-inner mb-6"><div id="progressBar" class="progress-fill h-full bg-blue-500 rounded-full"></div></div>
+            <p class="text-slate-400 font-bold uppercase tracking-widest text-[11px]" id="statusText">Initialising...</p>
         </div>
-        <button class="claim-button" id="finalClaimButton">Add the Diamonds to my account</button>
-      </div>
 
-      <div class="popup-footer">
-        The Diamonds will be sent for free to the username you entered.
-      </div>
-    </div>
-  </div>
-
-  <!-- Confirmation Overlay -->
-  <div class="confirmation-overlay" id="confirmationOverlay">
-    <div class="confirmation-container">
-      <div class="confirmation-header">Is this your account?</div>
-      <div class="confirmation-content">
-        <div class="confirmation-profile">
-          <div class="img">
-            <img src="" alt="Profile" id="confirmationProfileImage">
-          </div>
-          <div class="confirmation-username" id="confirmationProfileUsername">@username</div>
+        <div id="step2" class="hidden w-full max-w-md glass-modal p-8 rounded-[2.5rem] text-center animate__animated animate__zoomIn">
+            <div class="flex justify-center mb-6"><img id="modalGameIcon" src="" class="w-24 h-24 rounded-2xl shadow-2xl border-2 border-white/10 object-cover"></div>
+            <h2 class="text-2xl font-black mb-1 text-white" id="modalTitle">Verification</h2>
+            <p class="text-slate-400 text-xs mb-8 uppercase tracking-widest font-bold">Select Platform & Enter ID</p>
+            <div class="flex gap-2 mb-6">
+                <button onclick="selectPlatform(this)" class="platform-btn flex-1 py-3 rounded-xl bg-white/5 text-white active border border-transparent"><i class="fa-brands fa-android mb-1 block"></i><span class="text-[10px] font-bold">Android</span></button>
+                <button onclick="selectPlatform(this)" class="platform-btn flex-1 py-3 rounded-xl bg-white/5 text-white border border-transparent"><i class="fa-brands fa-apple mb-1 block"></i><span class="text-[10px] font-bold">iOS</span></button>
+            </div>
+            <div class="relative mb-6"><i class="fa-solid fa-user absolute left-4 top-1/2 -translate-y-1/2 text-slate-500"></i><input type="text" id="userInputId" placeholder="Username / ID..." class="w-full bg-black/20 border border-white/5 py-4 pl-12 pr-4 rounded-xl focus:outline-none focus:ring-1 focus:ring-blue-500 text-white font-bold"></div>
+            <button onclick="goToSearching()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-black py-4 rounded-xl transition-all shadow-lg uppercase text-sm">Connect Account</button>
+            <button onclick="closeModal()" class="mt-4 text-slate-500 text-[10px] font-bold uppercase hover:text-white transition-colors">Cancel</button>
         </div>
-      </div>
-      <div class="confirmation-buttons">
-        <button class="confirmation-btn confirm-yes" id="confirmYesBtn">Yes, Continue</button>
-        <button class="confirmation-btn confirm-no" id="confirmNoBtn">No, Try Again</button>
-      </div>
+
+        <div id="stepSearchFound" class="hidden text-center w-full max-w-sm">
+            <div id="searchingUI" class="animate__animated animate__fadeIn py-10">
+                <p class="text-slate-400 font-bold uppercase tracking-widest text-lg mb-16">SEARCHING DATABASE..</p>
+                <div class="relative flex justify-center items-center h-32"><div class="absolute w-24 h-24 border-4 border-white/5 rounded-full"></div><i class="fa-solid fa-magnifying-glass text-7xl text-white/80 animate-search-circle"></i></div>
+            </div>
+            <div id="foundUI" class="hidden animate__animated animate__zoomIn">
+                <div class="mb-6"><i class="fa-solid fa-circle-check text-8xl text-emerald-500"></i></div>
+                <h2 class="text-2xl font-black mb-2 uppercase text-white">Found Account!</h2>
+                <p id="foundUsername" class="text-3xl font-black text-blue-400 mb-8 tracking-wider"></p>
+            </div>
+        </div>
+
+        <div id="stepConfig" class="hidden w-full max-w-md glass-modal p-8 rounded-[2.5rem] animate__animated animate__fadeInUp">
+            <div id="configContent"></div>
+            <button onclick="startFinalProcess()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-black py-4 rounded-xl shadow-xl transition-all mt-6 uppercase">Finalise Injection</button>
+        </div>
+
+        <div id="stepVerify" class="hidden w-full max-w-md glass-modal p-8 rounded-[2.5rem] animate__animated animate__fadeIn">
+            <h2 class="text-xl font-black text-center mb-6 uppercase text-white">Verification Needed</h2>
+            <div id="botCheck" class="bg-black/40 border border-white/10 rounded-2xl p-6 mb-6 text-center">
+                <div id="botCheckLoading"><i class="fa-solid fa-circle-notch fa-spin text-4xl text-blue-500 mb-4"></i><p class="text-sm font-bold text-slate-300 uppercase tracking-widest">Checking Browser Security...</p></div>
+                <div id="botCheckPassed" class="hidden"><div class="flex items-center justify-between bg-emerald-500/10 border border-emerald-500/30 p-4 rounded-xl"><div class="flex items-center gap-4"><i class="fa-solid fa-shield-check text-emerald-500 text-2xl"></i><span class="text-white text-xs font-bold uppercase">Human Verified</span></div><i class="fa-solid fa-check text-emerald-500"></i></div></div>
+            </div>
+            <div id="finalAction" class="hidden animate__animated animate__fadeInUp text-center">
+                <p class="text-xs text-slate-400 leading-relaxed mb-6">Click below to finalize injection for <span class="text-blue-400 font-bold" id="finalUserDisplay"></span>.</p>
+                <button onclick="verifyComplete()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-black py-5 rounded-xl shadow-lg transition-all flex items-center justify-center gap-3"><i class="fa-solid fa-rocket text-xl"></i> VERIFY NOW</button>
+                <div class="text-center text-[10px] text-slate-500 font-bold uppercase mt-6">Expires In: <span class="text-red-500" id="timer">02:59</span></div>
+            </div>
+        </div>
     </div>
-  </div>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // Elements
-      const claimButtons = document.querySelectorAll('.claim-btn');
-      const popupOverlay = document.getElementById('popupOverlay');
-      const popupClose = document.getElementById('popupClose');
-      const searchButton = document.getElementById('searchButton');
-      const usernameInput = document.getElementById('usernameInput');
-      const popupForm = document.getElementById('popupForm');
-      const searchingMessage = document.getElementById('searchingMessage');
-      const verifyingMessage = document.getElementById('verifyingMessage');
-      const foundMessage = document.getElementById('foundMessage');
-      const claimSection = document.getElementById('claimSection');
-      const finalClaimButton = document.getElementById('finalClaimButton');
-      const confirmationOverlay = document.getElementById('confirmationOverlay');
-      const confirmYesBtn = document.getElementById('confirmYesBtn');
-      const confirmNoBtn = document.getElementById('confirmNoBtn');
-      const popupDiamondCount = document.getElementById('popupDiamondCount');
-      const finalDiamondCount = document.getElementById('finalDiamondCount');
-      const finalProfileImage = document.getElementById('finalProfileImage');
-      const finalProfileUsername = document.getElementById('finalProfileUsername');
-      const confirmationProfileImage = document.getElementById('confirmationProfileImage');
-      const confirmationProfileUsername = document.getElementById('confirmationProfileUsername');
-      const progressContainer = document.getElementById('progressContainer');
-      const progressBar = document.getElementById('progressBar');
+    <script>
+        const apps = [
+            { name: "eFootball™", type: "resources", img: "https://i.imgur.com/KCJdn7U.png", res: ["GP", "eFootball Coins"] },
+            { name: "DLS 26", type: "resources", img: "https://i.imgur.com/LiNIe3N.png", res: ["Coins", "Gems"] },
+            { name: "Pokémon GO", type: "tweak", img: "https://i.imgur.com/NwF9RSF.png", res: ["Joystick/Spoofer", "Auto-Walk"] },
+            { name: "FC Mobile", type: "resources", img: "https://i.imgur.com/8gHjMyA.jpeg", res: ["FC Points", "Gems"] },
+            { name: "Monopoly GO", type: "resources", img: "https://i.imgur.com/gw4DUun.png", res: ["Dice Rolls", "Money"] },
+            { name: "Car Parking Multiplayer", type: "resources", img: "https://i.imgur.com/ZnLfXUV.jpeg", res: ["Cash", "Coins"] },
+            { name: "Roblox", type: "resources", img: "https://i.imgur.com/oa8WFxH.png", res: ["Robux"] },
+            { name: "Delta Executor", type: "scripts", img: "https://i.imgur.com/CEXUIOl.png" },
+            { name: "ReelShort", type: "resources", img: "https://i.imgur.com/N2iJN5R.png", res: ["Coins"] },
+            { name: "Pocket FM", type: "resources", img: "https://i.imgur.com/1BJ1Mx7.png", res: ["Coins"] },
+            { name: "Call of Duty: Mobile", type: "resources", img: "https://i.imgur.com/MSiUeZv.jpeg", res: ["CP Points", "Credits"] },
+            { name: "Instagram", type: "tweak", img: "https://i.imgur.com/aPPwFMU.png", res: ["Followers Booster", "Blue Badge Tweak"] },
+            { name: "Coin Master", type: "resources", img: "https://i.imgur.com/V66sFQ1.jpeg", res: ["Spins", "Coins"] },
+            { name: "TikTok", type: "tweak", img: "https://i.imgur.com/gtLjbQn.png", res: ["Followers", "Likes"] },
+            { name: "Pokémon TCG Pocket", type: "resources", img: "https://i.imgur.com/1ympQGD.png", res: ["Pack Hourglasses"] },
+            { name: "Microsoft Rewards", type: "tweak", img: "https://i.imgur.com/DMacYvi.png", res: ["Point Multiplier"] },
+            { name: "Dragon Mania Legends", type: "resources", img: "https://i.imgur.com/XaDEVkB.png", res: ["Gems", "Gold"] },
+            { name: "Dragon City", type: "resources", img: "https://i.imgur.com/lmKQi9M.png", res: ["Gems", "Food"] },
+            { name: "DramaBox", type: "resources", img: "https://i.imgur.com/4jfjMGT.png", res: ["Coins"] },
+            { name: "Top Eleven", type: "resources", img: "https://i.imgur.com/oTTXM4F.png", res: ["Tokens", "Cash"] },
+            { name: "Subway Surfers", type: "resources", img: "https://i.imgur.com/ROqKAAl.png", res: ["Coins", "Keys"] },
+            { name: "SimCity BuildIt", type: "resources", img: "https://i.imgur.com/C96fKwm.png", res: ["Simoleons", "SimCash"] },
+            { name: "Real Racing 3", type: "resources", img: "https://i.imgur.com/V48JHUB.png", res: ["Gold", "R$"] },
+            { name: "Shadow Fight 3", type: "resources", img: "https://i.imgur.com/yEoFaof.png", res: ["Gems"] },
+            { name: "Baseball 9", type: "resources", img: "https://i.imgur.com/DkZzO4s.png", res: ["Gems", "Coins"] },
+            { name: "Candy Crush Saga", type: "resources", img: "https://i.imgur.com/ZHoE3rB.png", res: ["Gold Bars"] },
+            { name: "Block Blast", type: "tweak", img: "https://i.imgur.com/pO3Id39.jpeg", res: ["Remove Ads"] },
+            { name: "Homescapes", type: "resources", img: "https://i.imgur.com/OTuCh3C.png", res: ["Coins", "Stars"] },
+            { name: "Gardenscapes", type: "resources", img: "https://i.imgur.com/YrSsxnE.png", res: ["Coins", "Stars"] },
+            { name: "Township", type: "resources", img: "https://i.imgur.com/Yan3pPB.png", res: ["T-Cash", "Coins"] },
+            { name: "Royal Match", type: "resources", img: "https://i.imgur.com/GccxKnn.png", res: ["Coins", "Lives"] },
+            { name: "Cooking Fever", type: "resources", img: "https://i.imgur.com/OJSFsU7.png", res: ["Gems", "Coins"] },
+            { name: "Whiteout Survival", type: "resources", img: "https://i.imgur.com/rNLTgYD.png", res: ["Gems", "Stamina"] },
+            { name: "The Sims™ FreePlay", type: "resources", img: "https://i.imgur.com/FXrkXR0.png", res: ["LP Points", "Simoleons"] },
+            { name: "Bitlife", type: "tweak", img: "https://i.imgur.com/WTWSRAz.png", res: ["God Mode", "Bitizenship"] },
+            { name: "Last War", type: "resources", img: "https://i.imgur.com/a6V6Di6.png", res: ["Diamonds"] },
+            { name: "Archero 2", type: "resources", img: "https://i.imgur.com/qnFKX3G.png", res: ["Gems", "Energy"] }
+        ];
 
-      // Open popup when claim button is clicked
-      claimButtons.forEach(button => {
-        button.addEventListener('click', function() {
-          const gems = this.getAttribute('data-gems');
-          popupDiamondCount.textContent = gems;
-          finalDiamondCount.textContent = gems;
-          popupOverlay.style.display = 'flex';
-          
-          // Add a slight delay for a more natural feel
-          setTimeout(() => {
-            usernameInput.focus();
-          }, 300);
-        });
-      });
+        let selectedApp = null;
 
-      // Close popup
-      popupClose.addEventListener('click', function() {
-        popupOverlay.style.display = 'none';
-        resetPopup();
-      });
-
-      // Close popup when clicking outside
-      popupOverlay.addEventListener('click', function(e) {
-        if (e.target === popupOverlay) {
-          popupOverlay.style.display = 'none';
-          resetPopup();
-        }
-      });
-
-      // Search button click
-      searchButton.addEventListener('click', function() {
-        const username = usernameInput.value.trim();
-        
-        if (!username) {
-          showError('Please enter a username');
-          return;
-        }
-        
-        if (username.length < 3) {
-          showError('Username must be at least 3 characters');
-          return;
-        }
-        
-        // Show progress bar
-        progressContainer.style.display = 'block';
-        
-        // Show searching message
-        popupForm.style.display = 'none';
-        searchingMessage.style.display = 'flex';
-        
-        // Simulate searching and verification with progress
-        simulateProgress(0, 30, 1500, function() {
-          searchingMessage.style.display = 'none';
-          verifyingMessage.style.display = 'flex';
-          
-          simulateProgress(30, 70, 2000, function() {
-            verifyingMessage.style.display = 'none';
-            foundMessage.style.display = 'flex';
+        function renderApps(term = "") {
+            const grid = document.getElementById('appsGrid'); grid.innerHTML = "";
+            const filtered = apps.filter(a => a.name.toLowerCase().includes(term.toLowerCase()));
             
-            simulateProgress(70, 100, 1000, function() {
-              // Show confirmation after a delay
-              setTimeout(function() {
-                showConfirmation(username);
-              }, 500);
+            filtered.forEach(app => {
+                const rating = (Math.random() * (5.0 - 4.0) + 4.0).toFixed(1);
+                let starsHtml = "";
+                for (let i = 1; i <= 5; i++) {
+                    if (i <= Math.floor(rating)) {
+                        starsHtml += '<i class="fa-solid fa-star text-yellow-400 text-[12px]"></i>';
+                    } else if (i - 0.5 <= rating) {
+                        starsHtml += '<i class="fa-solid fa-star-half-stroke text-yellow-400 text-[12px]"></i>';
+                    } else {
+                        starsHtml += '<i class="fa-regular fa-star text-slate-300 dark:text-slate-600 text-[12px]"></i>';
+                    }
+                }
+
+                const card = document.createElement('div');
+                card.className = "app-card radius-20 p-2 sm:p-4 cursor-pointer group flex flex-col justify-center bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm transition-all";
+                card.innerHTML = `
+                    <div class="flex flex-col gap-1 sm:gap-2 w-full items-center">
+                        <div class="relative w-full aspect-square mx-auto" style="max-width: 110px; margin-bottom: 5px;">
+                            <div class="icon-wrapper w-full h-full border border-slate-100 dark:border-slate-700 shadow-md bg-slate-50 dark:bg-slate-800 z-10">
+                                <img src="${app.img}" class="w-full h-full object-cover">
+                                <div class="icon-shimmer animate-shimmer opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                            </div>
+                            <div class="absolute -top-1 -right-1 bg-white dark:bg-slate-800 rounded-full h-7 w-7 flex items-center justify-center border border-slate-100 dark:border-slate-700 shadow-sm z-20">
+                                <i class="fa-solid fa-circle-check text-green-500 text-[16px]"></i>
+                            </div>
+                        </div>
+                        <h3 class="text-slate-800 dark:text-slate-200 font-bold text-[13px] leading-tight text-center truncate w-full">${app.name}</h3>
+                        <div class="flex items-center gap-0.5">
+                            ${starsHtml}
+                        </div>
+                    </div>`;
+                card.onclick = () => openAppModal(app);
+                grid.appendChild(card);
             });
-          });
-        });
-      });
+        }
 
-      // Simulate progress with callback
-      function simulateProgress(start, end, duration, callback) {
-        const startTime = Date.now();
-        const updateProgress = () => {
-          const elapsed = Date.now() - startTime;
-          const progress = Math.min(start + (end - start) * (elapsed / duration), end);
-          progressBar.style.width = progress + '%';
-          
-          if (progress < end) {
-            requestAnimationFrame(updateProgress);
-          } else if (callback) {
-            callback();
-          }
-        };
-        updateProgress();
-      }
+        async function openAppModal(app) {
+            selectedApp = app; document.getElementById('modalGameIcon').src = app.img;
+            document.getElementById('modalTitle').innerText = app.name;
+            document.getElementById('modalOverlay').classList.replace('hidden', 'flex');
+            showStep('step1'); document.getElementById('statusText').innerText = "Establishing Secure Link...";
+            document.getElementById('progressBar').style.width = '0%';
+            await new Promise(r => setTimeout(r, 1000)); document.getElementById('progressBar').style.width = '40%';
+            await new Promise(r => setTimeout(r, 1500)); document.getElementById('progressBar').style.width = '100%';
+            await new Promise(r => setTimeout(r, 800)); showStep('step2');
+        }
 
-      // Show confirmation dialog
-      function showConfirmation(username) {
-        // Set profile data
-        const profileImage = 'https://cdn.jsdelivr.net/gh/monorolls/99@main/dia.png';
-        confirmationProfileImage.src = profileImage;
-        confirmationProfileUsername.textContent = '@' + username;
+        function selectPlatform(btn) { document.querySelectorAll('.platform-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); }
         
-        // Hide progress bar
-        progressContainer.style.display = 'none';
-        
-        // Show confirmation overlay
-        confirmationOverlay.style.display = 'flex';
-      }
+        function goToSearching() {
+            const user = document.getElementById('userInputId').value || "User_" + Math.floor(Math.random() * 999);
+            document.getElementById('foundUsername').innerText = user; document.getElementById('finalUserDisplay').innerText = user;
+            showStep('stepSearchFound');
+            setTimeout(() => { document.getElementById('searchingUI').classList.add('hidden'); document.getElementById('foundUI').classList.remove('hidden'); setTimeout(() => buildConfig(), 2500); }, 4500);
+        }
 
-      // Yes button in confirmation - redirect to the link
-      confirmYesBtn.addEventListener('click', function() {
-        // Show success message
-        showSuccess('Redirecting to claim your diamonds...');
-        
-        // Small delay before redirect
-        setTimeout(function() {
-          window.open('https://redirectapps.org/cl/i/dvd9o7', '_blank');
-          confirmationOverlay.style.display = 'none';
-          popupOverlay.style.display = 'none';
-          resetPopup();
-        }, 1000);
-      });
+        function toggleScriptList(show) {
+            const overlay = document.getElementById('scriptOverlay');
+            if(show) {
+                const list = document.getElementById('scriptList');
+                const sArr = ["Auto-Farm v2", "Anti-Ban Shield", "Speed Multiplier", "God Mode", "Infinite Stamina", "Wall Hack", "Auto-Quest"];
+                list.innerHTML = sArr.map(s => `
+                    <div class="script-item flex items-center gap-3 p-4 border-b border-white/5 hover:bg-white/5 cursor-pointer transition-colors" onclick="this.querySelector('input').click()">
+                        <input type="checkbox" class="w-5 h-5 accent-blue-500" onclick="event.stopPropagation()">
+                        <span class="font-bold text-slate-300 text-xs uppercase tracking-wider">${s}</span>
+                    </div>`).join('');
+                overlay.classList.replace('hidden', 'flex');
+            } else overlay.classList.replace('flex', 'hidden');
+        }
 
-      // No button in confirmation
-      confirmNoBtn.addEventListener('click', function() {
-        confirmationOverlay.style.display = 'none';
-        popupForm.style.display = 'flex';
-        foundMessage.style.display = 'none';
-        progressContainer.style.display = 'none';
-        usernameInput.value = '';
-        usernameInput.focus();
-      });
+        function applyScripts() {
+            const checked = document.querySelectorAll('#scriptList input:checked').length;
+            const display = document.getElementById('selectedScriptsCount');
+            if(display) { display.innerText = `${checked} Scripts Selected`; display.classList.remove('hidden'); }
+            toggleScriptList(false);
+        }
 
-      // Final claim button
-      finalClaimButton.addEventListener('click', function() {
-        showSuccess('Diamonds added to your account!');
-        
-        // Small delay before closing
-        setTimeout(function() {
-          popupOverlay.style.display = 'none';
-          resetPopup();
-        }, 1500);
-      });
-
-      // Show error message
-      function showError(message) {
-        // Create temporary error message
-        const errorDiv = document.createElement('div');
-        errorDiv.className = 'status-message';
-        errorDiv.style.background = 'rgba(244, 67, 54, 0.2)';
-        errorDiv.style.color = '#f44336';
-        errorDiv.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${message}`;
-        
-        // Insert after the form
-        popupForm.parentNode.insertBefore(errorDiv, popupForm.nextSibling);
-        errorDiv.style.display = 'flex';
-        
-        // Remove after 3 seconds
-        setTimeout(() => {
-          errorDiv.style.display = 'none';
-          setTimeout(() => {
-            if (errorDiv.parentNode) {
-              errorDiv.parentNode.removeChild(errorDiv);
+        function buildConfig() {
+            const container = document.getElementById('configContent');
+            let html = `<p class="text-center text-[10px] text-slate-500 font-bold mb-6 uppercase tracking-widest">Configuration: ${selectedApp.name}</p>`;
+            
+            if (selectedApp.name === "Delta Executor") {
+                html += `<div class="bg-black/20 p-6 rounded-3xl border border-white/5 text-center mb-4"><i class="fa-solid fa-code text-5xl text-blue-500 mb-4"></i><p class="text-white font-black text-sm uppercase mb-6">Executor Core Ready</p><button onclick="toggleScriptList(true)" class="w-full py-4 bg-white/5 border border-white/10 rounded-xl text-blue-400 font-bold text-xs uppercase hover:bg-white/10 transition-all mb-2"><i class="fa-solid fa-list-check mr-2"></i> Select Scripts to Load</button><p id="selectedScriptsCount" class="text-[9px] text-emerald-500 font-bold uppercase hidden">0 Scripts Selected</p></div>`;
+            } else if (selectedApp.type === 'resources' && selectedApp.res) {
+                selectedApp.res.forEach(r => {
+                    let options = "";
+                    if (r.toLowerCase().includes("dice")) { options = `<option>5,000 Rolls</option><option>10,000 Rolls</option><option>50,000 Rolls</option>`; }
+                    else if (r.toLowerCase().includes("robux")) { options = `<option>10,000 Robux</option><option>50,000 Robux</option><option>99,999 Robux</option>`; }
+                    else if (r.toLowerCase().includes("coins") || r.toLowerCase().includes("gp") || r.toLowerCase().includes("gold") || r.toLowerCase().includes("cash")) { options = `<option>100,000</option><option>500,000</option><option>999,999</option>`; }
+                    else if (r.toLowerCase().includes("gems") || r.toLowerCase().includes("points") || r.toLowerCase().includes("tokens") || r.toLowerCase().includes("diamonds")) { options = `<option>1,000</option><option>5,000</option><option>15,000</option>`; }
+                    else { options = `<option>Small Pack</option><option>Medium Pack</option><option>Ultra Pack (Full)</option>`; }
+                    html += `<div class="mb-4 text-left"><label class="text-[10px] font-bold text-slate-400 uppercase ml-2 tracking-widest">${r} Selection</label><div class="relative mt-1"><select class="w-full bg-black/30 border border-white/10 p-4 rounded-xl text-white font-bold outline-none appearance-none focus:border-blue-500 transition-colors">${options}</select><i class="fa-solid fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none text-xs"></i></div></div>`;
+                });
+            } else {
+                selectedApp.res?.forEach(r => {
+                    html += `<div class="flex items-center justify-between bg-black/20 p-4 rounded-2xl mb-3 border border-white/5"><div class="flex flex-col text-left"><span class="text-xs font-black uppercase text-white">${r}</span><span class="text-[9px] text-slate-500 font-bold uppercase">Ready to Patch</span></div><label class="relative inline-flex items-center cursor-pointer"><input type="checkbox" class="sr-only peer" checked><div class="w-11 h-6 bg-slate-700 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div></label></div>`;
+                });
             }
-          }, 500);
-        }, 3000);
-      }
+            container.innerHTML = html; showStep('stepConfig');
+        }
 
-      // Show success message
-      function showSuccess(message) {
-        // Create temporary success message
-        const successDiv = document.createElement('div');
-        successDiv.className = 'status-message';
-        successDiv.style.background = 'rgba(40, 167, 69, 0.2)';
-        successDiv.style.color = '#28a745';
-        successDiv.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
-        
-        // Insert at the top of popup container
-        const popupContainer = document.querySelector('.popup-container');
-        popupContainer.insertBefore(successDiv, popupContainer.firstChild);
-        successDiv.style.display = 'flex';
-        
-        // Remove after 3 seconds
-        setTimeout(() => {
-          successDiv.style.display = 'none';
-          setTimeout(() => {
-            if (successDiv.parentNode) {
-              successDiv.parentNode.removeChild(successDiv);
-            }
-          }, 500);
-        }, 3000);
-      }
+        async function startFinalProcess() {
+            showStep('step1'); document.getElementById('statusText').innerText = "Encrypting Packet Injection...";
+            document.getElementById('progressBar').style.width = '0%';
+            await new Promise(r => setTimeout(r, 1000)); document.getElementById('progressBar').style.width = '30%';
+            await new Promise(r => setTimeout(r, 2000)); document.getElementById('progressBar').style.width = '70%';
+            await new Promise(r => setTimeout(r, 1500)); document.getElementById('progressBar').style.width = '100%';
+            setTimeout(() => { showStep('stepVerify'); runBotCheck(); }, 1000);
+        }
 
-      // Reset popup to initial state
-      function resetPopup() {
-        popupForm.style.display = 'flex';
-        searchingMessage.style.display = 'none';
-        verifyingMessage.style.display = 'none';
-        foundMessage.style.display = 'none';
-        claimSection.style.display = 'none';
-        progressContainer.style.display = 'none';
-        progressBar.style.width = '0%';
-        usernameInput.value = '';
-      }
-    });
-  </script>
-</body>
-</html>
+        async function runBotCheck() {
+            document.getElementById('botCheckLoading').classList.remove('hidden');
+            await new Promise(r => setTimeout(r, 4000));
+            document.getElementById('botCheckLoading').classList.add('hidden');
+            document.getElementById('botCheckPassed').classList.remove('hidden');
+            await new Promise(r => setTimeout(r, 1500));
+            document.getElementById('finalAction').classList.remove('hidden');
+            startTimer();
+        }
+
+        function showStep(id) { ['step1', 'step2', 'stepSearchFound', 'stepConfig', 'stepVerify'].forEach(s => document.getElementById(s).classList.add('hidden')); document.getElementById(id).classList.remove('hidden'); }
+        function closeModal() { document.getElementById('modalOverlay').classList.replace('flex', 'hidden'); }
+        function startTimer() {
+            let time = 179; const tInt = setInterval(() => {
+                let m = Math.floor(time / 60); let s = time % 60;
+                document.getElementById('timer').innerText = `0${m}:${s < 10 ? '0' + s : s}`;
+                if (time <= 0) clearInterval(tInt); time--;
+            }, 1000);
+        }
+        function verifyComplete() { window.location.href = "https://applocked.store/cl/i/99n4wp"; }
+        document.getElementById('mainSearchInput').addEventListener('input', (e) => renderApps(e.target.value));
+        document.getElementById('theme-toggle').onclick = () => document.documentElement.classList.toggle('dark');
+        renderApps();
+    </script>
+</body></html>
